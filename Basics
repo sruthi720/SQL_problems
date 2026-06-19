@@ -1,0 +1,421 @@
+Start with **Basic SQL Queries** exactly like interview practice.
+
+Assume this table:
+
+### Employee Table
+
+| id | name  | department | salary |
+| -- | ----- | ---------- | ------ |
+| 1  | John  | IT         | 50000  |
+| 2  | Mary  | HR         | 40000  |
+| 3  | David | IT         | 60000  |
+| 4  | Sara  | Finance    | 55000  |
+| 5  | Tom   | HR         | 45000  |
+
+---
+
+# 1. SELECT
+
+### Problem 1
+
+Display all employee records.
+
+```sql
+SELECT * FROM employee;
+```
+
+### Output
+
+| id | name  | department | salary |
+| -- | ----- | ---------- | ------ |
+| 1  | John  | IT         | 50000  |
+| 2  | Mary  | HR         | 40000  |
+| 3  | David | IT         | 60000  |
+| 4  | Sara  | Finance    | 55000  |
+| 5  | Tom   | HR         | 45000  |
+
+---
+
+### Problem 2
+
+Display only employee names.
+
+```sql
+SELECT name
+FROM employee;
+```
+
+---
+
+### Interview Question
+
+What is the difference between
+
+```sql
+SELECT *
+```
+
+and
+
+```sql
+SELECT name,salary
+```
+
+**Answer:**
+
+* `SELECT *` returns all columns.
+* `SELECT name,salary` returns only specified columns.
+
+---
+
+# 2. WHERE
+
+Used for filtering rows.
+
+### Problem 1
+
+Find employees whose salary is greater than 50000.
+
+```sql
+SELECT *
+FROM employee
+WHERE salary > 50000;
+```
+
+### Output
+
+| id | name  |
+| -- | ----- |
+| 3  | David |
+| 4  | Sara  |
+
+---
+
+### Problem 2
+
+Find employees from IT department.
+
+```sql
+SELECT *
+FROM employee
+WHERE department='IT';
+```
+
+---
+
+### Problem 3
+
+Find employee with id 3.
+
+```sql
+SELECT *
+FROM employee
+WHERE id=3;
+```
+
+---
+
+# 3. ORDER BY
+
+Used for sorting.
+
+### Problem 1
+
+Display employees by salary ascending.
+
+```sql
+SELECT *
+FROM employee
+ORDER BY salary;
+```
+
+---
+
+### Problem 2
+
+Display employees by salary descending.
+
+```sql
+SELECT *
+FROM employee
+ORDER BY salary DESC;
+```
+
+### Output
+
+| name  | salary |
+| ----- | ------ |
+| David | 60000  |
+| Sara  | 55000  |
+| John  | 50000  |
+| Tom   | 45000  |
+| Mary  | 40000  |
+
+---
+
+### Interview Question
+
+Default order?
+
+**Answer:**
+
+```sql
+ORDER BY salary
+```
+
+means ascending order by default.
+
+---
+
+# 4. DISTINCT
+
+Used to remove duplicates.
+
+### Problem
+
+Find unique departments.
+
+```sql
+SELECT DISTINCT department
+FROM employee;
+```
+
+### Output
+
+| department |
+| ---------- |
+| IT         |
+| HR         |
+| Finance    |
+
+---
+
+### Interview Question
+
+Difference between
+
+```sql
+SELECT department
+```
+
+and
+
+```sql
+SELECT DISTINCT department
+```
+
+**Answer:**
+
+* First returns duplicates.
+* DISTINCT removes duplicates.
+
+---
+
+# 5. LIMIT
+
+Used to restrict number of rows.
+
+### Problem 1
+
+Get first 3 employees.
+
+```sql
+SELECT *
+FROM employee
+LIMIT 3;
+```
+
+---
+
+### Problem 2
+
+Get highest paid employee.
+
+```sql
+SELECT *
+FROM employee
+ORDER BY salary DESC
+LIMIT 1;
+```
+
+### Output
+
+| name  | salary |
+| ----- | ------ |
+| David | 60000  |
+
+---
+
+# 6. BETWEEN
+
+Used for range search.
+
+### Problem 1
+
+Find employees with salary between 45000 and 55000.
+
+```sql
+SELECT *
+FROM employee
+WHERE salary BETWEEN 45000 AND 55000;
+```
+
+### Output
+
+| name | salary |
+| ---- | ------ |
+| John | 50000  |
+| Sara | 55000  |
+| Tom  | 45000  |
+
+---
+
+### Equivalent Query
+
+```sql
+SELECT *
+FROM employee
+WHERE salary >=45000
+AND salary <=55000;
+```
+
+---
+
+# 7. IN
+
+Used for multiple values.
+
+### Problem
+
+Find employees from IT and HR departments.
+
+```sql
+SELECT *
+FROM employee
+WHERE department IN ('IT','HR');
+```
+
+### Output
+
+| name  | department |
+| ----- | ---------- |
+| John  | IT         |
+| David | IT         |
+| Mary  | HR         |
+| Tom   | HR         |
+
+---
+
+### Equivalent Query
+
+```sql
+SELECT *
+FROM employee
+WHERE department='IT'
+OR department='HR';
+```
+
+---
+
+# 8. LIKE
+
+Used for pattern matching.
+
+### Wildcards
+
+* `%` = any number of characters
+* `_` = exactly one character
+
+---
+
+### Problem 1
+
+Find names starting with 'J'.
+
+```sql
+SELECT *
+FROM employee
+WHERE name LIKE 'J%';
+```
+
+Output:
+
+John
+
+---
+
+### Problem 2
+
+Find names ending with 'a'.
+
+```sql
+SELECT *
+FROM employee
+WHERE name LIKE '%a';
+```
+
+Output:
+
+Sara
+
+---
+
+### Problem 3
+
+Find names containing 'ar'.
+
+```sql
+SELECT *
+FROM employee
+WHERE name LIKE '%ar%';
+```
+
+Output:
+
+Mary
+Sara
+
+---
+
+## Interview Round Practice
+
+**Q1:** Find all employees whose salary is above 45000.
+
+```sql
+SELECT *
+FROM employee
+WHERE salary > 45000;
+```
+
+**Q2:** Find all HR employees.
+
+```sql
+SELECT *
+FROM employee
+WHERE department='HR';
+```
+
+**Q3:** Show top 2 highest-paid employees.
+
+```sql
+SELECT *
+FROM employee
+ORDER BY salary DESC
+LIMIT 2;
+```
+
+**Q4:** Find employees whose salary is between 40000 and 50000.
+
+```sql
+SELECT *
+FROM employee
+WHERE salary BETWEEN 40000 AND 50000;
+```
+
+**Q5:** Find names starting with 'M'.
+
+```sql
+SELECT *
+FROM employee
+WHERE name LIKE 'M%';
+```
