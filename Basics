@@ -1,4 +1,4 @@
-Start with **Basic SQL Queries** exactly like interview practice.
+Perfect. We'll start with **Basic SQL Queries** exactly like interview practice.
 
 Assume this table:
 
@@ -419,3 +419,5 @@ SELECT *
 FROM employee
 WHERE name LIKE 'M%';
 ```
+
+Master these first. In interviews, the next most important topic is **GROUP BY and HAVING**, followed by **JOINS**. Those two alone account for a large share of SQL interview questions.
