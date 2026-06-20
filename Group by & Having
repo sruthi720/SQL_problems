@@ -1,0 +1,397 @@
+# GROUP BY & HAVING (Very Important)
+
+This is one of the most frequently asked SQL topics in Java Developer interviews.
+
+Use the same table:
+
+| id | name  | department | salary |
+| -- | ----- | ---------- | ------ |
+| 1  | John  | IT         | 50000  |
+| 2  | Mary  | HR         | 40000  |
+| 3  | David | IT         | 60000  |
+| 4  | Sara  | Finance    | 55000  |
+| 5  | Tom   | HR         | 45000  |
+
+---
+
+# What is GROUP BY?
+
+Used to group rows having the same value.
+
+### Example
+
+Without GROUP BY:
+
+```sql
+SELECT COUNT(*)
+FROM employee;
+```
+
+Output:
+
+```text
+5
+```
+
+Counts all employees.
+
+---
+
+With GROUP BY:
+
+```sql
+SELECT department,
+       COUNT(*)
+FROM employee
+GROUP BY department;
+```
+
+Output:
+
+| department | count |
+| ---------- | ----- |
+| IT         | 2     |
+| HR         | 2     |
+| Finance    | 1     |
+
+Grouped by department.
+
+---
+
+# Problem 1
+
+Find number of employees in each department.
+
+```sql
+SELECT department,
+       COUNT(*) AS employee_count
+FROM employee
+GROUP BY department;
+```
+
+Output:
+
+| department | employee_count |
+| ---------- | -------------- |
+| IT         | 2              |
+| HR         | 2              |
+| Finance    | 1              |
+
+---
+
+# Problem 2
+
+Find total salary in each department.
+
+```sql
+SELECT department,
+       SUM(salary) AS total_salary
+FROM employee
+GROUP BY department;
+```
+
+Output:
+
+| department | total_salary |
+| ---------- | ------------ |
+| IT         | 110000       |
+| HR         | 85000        |
+| Finance    | 55000        |
+
+---
+
+# Problem 3
+
+Find average salary in each department.
+
+```sql
+SELECT department,
+       AVG(salary) AS avg_salary
+FROM employee
+GROUP BY department;
+```
+
+Output:
+
+| department | avg_salary |
+| ---------- | ---------- |
+| IT         | 55000      |
+| HR         | 42500      |
+| Finance    | 55000      |
+
+---
+
+# Problem 4
+
+Find highest salary in each department.
+
+```sql
+SELECT department,
+       MAX(salary) AS highest_salary
+FROM employee
+GROUP BY department;
+```
+
+Output:
+
+| department | highest_salary |
+| ---------- | -------------- |
+| IT         | 60000          |
+| HR         | 45000          |
+| Finance    | 55000          |
+
+---
+
+# Problem 5
+
+Find lowest salary in each department.
+
+```sql
+SELECT department,
+       MIN(salary) AS lowest_salary
+FROM employee
+GROUP BY department;
+```
+
+---
+
+# HAVING Clause
+
+### Why HAVING?
+
+`WHERE` cannot be used on aggregate results.
+
+Wrong:
+
+```sql
+SELECT department,
+       COUNT(*)
+FROM employee
+WHERE COUNT(*) > 1
+GROUP BY department;
+```
+
+❌ Error
+
+---
+
+Correct:
+
+```sql
+SELECT department,
+       COUNT(*)
+FROM employee
+GROUP BY department
+HAVING COUNT(*) > 1;
+```
+
+Output:
+
+| department | count |
+| ---------- | ----- |
+| IT         | 2     |
+| HR         | 2     |
+
+---
+
+# Problem 6
+
+Departments having more than 1 employee.
+
+```sql
+SELECT department,
+       COUNT(*)
+FROM employee
+GROUP BY department
+HAVING COUNT(*) > 1;
+```
+
+---
+
+# Problem 7
+
+Departments whose total salary exceeds 100000.
+
+```sql
+SELECT department,
+       SUM(salary)
+FROM employee
+GROUP BY department
+HAVING SUM(salary) > 100000;
+```
+
+Output:
+
+| department | total_salary |
+| ---------- | ------------ |
+| IT         | 110000       |
+
+---
+
+# Problem 8
+
+Departments with average salary greater than 50000.
+
+```sql
+SELECT department,
+       AVG(salary)
+FROM employee
+GROUP BY department
+HAVING AVG(salary) > 50000;
+```
+
+Output:
+
+| department |
+| ---------- |
+| IT         |
+| Finance    |
+
+---
+
+# WHERE vs HAVING (Most Asked)
+
+### WHERE
+
+Filters rows before grouping.
+
+```sql
+SELECT *
+FROM employee
+WHERE salary > 45000;
+```
+
+---
+
+### HAVING
+
+Filters groups after grouping.
+
+```sql
+SELECT department,
+       COUNT(*)
+FROM employee
+GROUP BY department
+HAVING COUNT(*) > 1;
+```
+
+---
+
+### Interview Answer
+
+| WHERE                          | HAVING                      |
+| ------------------------------ | --------------------------- |
+| Filters rows                   | Filters groups              |
+| Used before GROUP BY           | Used after GROUP BY         |
+| Cannot use aggregate functions | Can use aggregate functions |
+
+---
+
+# Combination of WHERE + GROUP BY + HAVING
+
+### Problem
+
+Find departments having more than one employee whose salary is above 40000.
+
+```sql
+SELECT department,
+       COUNT(*)
+FROM employee
+WHERE salary > 40000
+GROUP BY department
+HAVING COUNT(*) > 1;
+```
+
+Output:
+
+| department |
+| ---------- |
+| IT         |
+| HR         |
+
+---
+
+# CPDSS Interview Examples
+
+### Count communication records per vessel
+
+```sql
+SELECT vessel_id,
+       COUNT(*)
+FROM data_transfer_in_bound
+GROUP BY vessel_id;
+```
+
+---
+
+### Vessels having more than 100 records
+
+```sql
+SELECT vessel_id,
+       COUNT(*)
+FROM data_transfer_in_bound
+GROUP BY vessel_id
+HAVING COUNT(*) > 100;
+```
+
+---
+
+### Total records per process
+
+```sql
+SELECT process_id,
+       COUNT(*)
+FROM data_transfer_in_bound
+GROUP BY process_id;
+```
+
+---
+
+# Frequently Asked Interview Questions
+
+### Q1. Why do we use GROUP BY?
+
+To group rows with the same values and perform aggregate calculations like COUNT, SUM, AVG, MIN, and MAX.
+
+---
+
+### Q2. Can HAVING be used without GROUP BY?
+
+Yes.
+
+```sql
+SELECT COUNT(*)
+FROM employee
+HAVING COUNT(*) > 3;
+```
+
+---
+
+### Q3. Execution Order of SQL Query
+
+```sql
+FROM
+WHERE
+GROUP BY
+HAVING
+SELECT
+ORDER BY
+LIMIT
+```
+
+Very common interview question.
+
+---
+
+## Practice Questions
+
+1. Count employees in each department.
+2. Find total salary in each department.
+3. Find average salary in each department.
+4. Find departments having more than 2 employees.
+5. Find departments whose total salary exceeds 1 lakh.
+6. Find highest salary in each department.
+7. Find lowest salary in each department.
+8. Find departments with average salary greater than 50,000.
+
+After this, move to **JOINS (INNER, LEFT, RIGHT, FULL JOIN)** because that is the most asked SQL topic in Java/Spring Boot interviews.
