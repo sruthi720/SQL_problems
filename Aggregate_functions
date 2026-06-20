@@ -1,0 +1,385 @@
+# Aggregate Functions (Very Important for Interviews)
+
+Use the same table:
+
+| id | name  | department | salary |
+| -- | ----- | ---------- | ------ |
+| 1  | John  | IT         | 50000  |
+| 2  | Mary  | HR         | 40000  |
+| 3  | David | IT         | 60000  |
+| 4  | Sara  | Finance    | 55000  |
+| 5  | Tom   | HR         | 45000  |
+
+Aggregate functions perform calculations on multiple rows and return a single result.
+
+---
+
+# 1. COUNT()
+
+Used to count records.
+
+### Problem 1
+
+Count total employees.
+
+```sql
+SELECT COUNT(*)
+FROM employee;
+```
+
+### Output
+
+```text
+5
+```
+
+---
+
+### Problem 2
+
+Count employees in IT department.
+
+```sql
+SELECT COUNT(*)
+FROM employee
+WHERE department='IT';
+```
+
+### Output
+
+```text
+2
+```
+
+---
+
+### Interview Question
+
+Difference between:
+
+```sql
+COUNT(*)
+```
+
+and
+
+```sql
+COUNT(column_name)
+```
+
+**Answer**
+
+```sql
+COUNT(*)         -> Counts all rows
+COUNT(salary)    -> Counts only non-null salaries
+```
+
+---
+
+# 2. SUM()
+
+Used to find total.
+
+### Problem 1
+
+Find total salary paid.
+
+```sql
+SELECT SUM(salary)
+FROM employee;
+```
+
+### Calculation
+
+```text
+50000 + 40000 + 60000 + 55000 + 45000
+= 250000
+```
+
+### Output
+
+```text
+250000
+```
+
+---
+
+### Problem 2
+
+Find total salary of IT employees.
+
+```sql
+SELECT SUM(salary)
+FROM employee
+WHERE department='IT';
+```
+
+### Output
+
+```text
+110000
+```
+
+---
+
+# 3. AVG()
+
+Used to find average.
+
+### Problem 1
+
+Find average salary.
+
+```sql
+SELECT AVG(salary)
+FROM employee;
+```
+
+### Calculation
+
+```text
+250000 / 5
+= 50000
+```
+
+### Output
+
+```text
+50000
+```
+
+---
+
+### Problem 2
+
+Find average salary in HR department.
+
+```sql
+SELECT AVG(salary)
+FROM employee
+WHERE department='HR';
+```
+
+### Calculation
+
+```text
+(40000 + 45000) / 2
+= 42500
+```
+
+---
+
+### Interview Question
+
+Employees earning above average salary.
+
+```sql
+SELECT *
+FROM employee
+WHERE salary >
+(
+  SELECT AVG(salary)
+  FROM employee
+);
+```
+
+### Output
+
+David, Sara
+
+---
+
+# 4. MIN()
+
+Used to find smallest value.
+
+### Problem 1
+
+Find lowest salary.
+
+```sql
+SELECT MIN(salary)
+FROM employee;
+```
+
+### Output
+
+```text
+40000
+```
+
+---
+
+### Problem 2
+
+Find employee with lowest salary.
+
+```sql
+SELECT *
+FROM employee
+WHERE salary =
+(
+  SELECT MIN(salary)
+  FROM employee
+);
+```
+
+### Output
+
+Mary
+
+---
+
+# 5. MAX()
+
+Used to find highest value.
+
+### Problem 1
+
+Find highest salary.
+
+```sql
+SELECT MAX(salary)
+FROM employee;
+```
+
+### Output
+
+```text
+60000
+```
+
+---
+
+### Problem 2
+
+Find employee with highest salary.
+
+```sql
+SELECT *
+FROM employee
+WHERE salary =
+(
+  SELECT MAX(salary)
+  FROM employee
+);
+```
+
+### Output
+
+David
+
+---
+
+# Most Asked Interview Problems
+
+### Find total employees
+
+```sql
+SELECT COUNT(*)
+FROM employee;
+```
+
+---
+
+### Find total salary
+
+```sql
+SELECT SUM(salary)
+FROM employee;
+```
+
+---
+
+### Find average salary
+
+```sql
+SELECT AVG(salary)
+FROM employee;
+```
+
+---
+
+### Find highest salary
+
+```sql
+SELECT MAX(salary)
+FROM employee;
+```
+
+---
+
+### Find lowest salary
+
+```sql
+SELECT MIN(salary)
+FROM employee;
+```
+
+---
+
+### Find employees earning more than average salary
+
+```sql
+SELECT *
+FROM employee
+WHERE salary >
+(
+ SELECT AVG(salary)
+ FROM employee
+);
+```
+
+---
+
+# CPDSS Interview Examples
+
+### Total records in communication table
+
+```sql
+SELECT COUNT(*)
+FROM data_transfer_in_bound;
+```
+
+---
+
+### Latest vessel communication count
+
+```sql
+SELECT vessel_id,
+       COUNT(*)
+FROM data_transfer_in_bound
+GROUP BY vessel_id;
+```
+
+---
+
+### Maximum communication delay
+
+```sql
+SELECT MAX(processed_time)
+FROM data_transfer_in_bound;
+```
+
+---
+
+## Interview Quick Revision
+
+| Function | Purpose       |
+| -------- | ------------- |
+| COUNT()  | Count rows    |
+| SUM()    | Total value   |
+| AVG()    | Average value |
+| MIN()    | Lowest value  |
+| MAX()    | Highest value |
+
+### Expected TCS/Java Developer Question
+
+**Q:** Difference between COUNT(*) and COUNT(column)?
+
+**A:**
+
+* `COUNT(*)` counts all rows.
+* `COUNT(column)` counts only non-null values.
+
+Next, learn **GROUP BY and HAVING** because aggregate functions are usually used together with GROUP BY in interviews.
