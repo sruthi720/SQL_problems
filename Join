@@ -1,0 +1,458 @@
+# SQL JOINS (Most Important Interview Topic)
+
+Almost every Java Developer interview asks JOINS.
+
+---
+
+## Sample Tables
+
+### Employee
+
+| emp_id | name  | dept_id |
+| ------ | ----- | ------- |
+| 1      | John  | 101     |
+| 2      | Mary  | 102     |
+| 3      | David | 101     |
+| 4      | Sara  | 103     |
+| 5      | Tom   | NULL    |
+
+---
+
+### Department
+
+| dept_id | dept_name |
+| ------- | --------- |
+| 101     | IT        |
+| 102     | HR        |
+| 103     | Finance   |
+| 104     | Admin     |
+
+---
+
+# 1. INNER JOIN
+
+Returns only matching records from both tables.
+
+```sql
+SELECT e.emp_id,
+       e.name,
+       d.dept_name
+FROM employee e
+INNER JOIN department d
+ON e.dept_id = d.dept_id;
+```
+
+### Output
+
+| emp_id | name  | dept_name |
+| ------ | ----- | --------- |
+| 1      | John  | IT        |
+| 2      | Mary  | HR        |
+| 3      | David | IT        |
+| 4      | Sara  | Finance   |
+
+Tom is not shown because no matching department.
+
+---
+
+## Interview Answer
+
+**INNER JOIN returns only matching rows from both tables.**
+
+---
+
+# 2. LEFT JOIN
+
+Returns all records from left table and matching records from right table.
+
+```sql
+SELECT e.emp_id,
+       e.name,
+       d.dept_name
+FROM employee e
+LEFT JOIN department d
+ON e.dept_id = d.dept_id;
+```
+
+### Output
+
+| emp_id | name  | dept_name |
+| ------ | ----- | --------- |
+| 1      | John  | IT        |
+| 2      | Mary  | HR        |
+| 3      | David | IT        |
+| 4      | Sara  | Finance   |
+| 5      | Tom   | NULL      |
+
+Tom appears because LEFT JOIN returns all employee records.
+
+---
+
+## Interview Answer
+
+**LEFT JOIN returns all rows from left table and matching rows from right table.**
+
+---
+
+# 3. RIGHT JOIN
+
+Returns all records from right table and matching records from left table.
+
+```sql
+SELECT e.name,
+       d.dept_name
+FROM employee e
+RIGHT JOIN department d
+ON e.dept_id = d.dept_id;
+```
+
+### Output
+
+| name  | dept_name |
+| ----- | --------- |
+| John  | IT        |
+| David | IT        |
+| Mary  | HR        |
+| Sara  | Finance   |
+| NULL  | Admin     |
+
+Admin appears because RIGHT JOIN returns all department records.
+
+---
+
+## Interview Answer
+
+**RIGHT JOIN returns all rows from right table and matching rows from left table.**
+
+---
+
+# 4. FULL OUTER JOIN
+
+Returns all records from both tables.
+
+```sql
+SELECT e.name,
+       d.dept_name
+FROM employee e
+FULL OUTER JOIN department d
+ON e.dept_id = d.dept_id;
+```
+
+### Output
+
+| name  | dept_name |
+| ----- | --------- |
+| John  | IT        |
+| David | IT        |
+| Mary  | HR        |
+| Sara  | Finance   |
+| Tom   | NULL      |
+| NULL  | Admin     |
+
+---
+
+## Interview Answer
+
+**FULL JOIN returns matching rows plus unmatched rows from both tables.**
+
+---
+
+# 5. CROSS JOIN
+
+Every employee combines with every department.
+
+```sql
+SELECT e.name,
+       d.dept_name
+FROM employee e
+CROSS JOIN department d;
+```
+
+### Rows Produced
+
+```text
+5 Employees × 4 Departments = 20 Rows
+```
+
+---
+
+## Interview Answer
+
+**CROSS JOIN creates Cartesian Product.**
+
+---
+
+# Most Asked Problems
+
+## Problem 1
+
+Find employee names with department names.
+
+```sql
+SELECT e.name,
+       d.dept_name
+FROM employee e
+INNER JOIN department d
+ON e.dept_id=d.dept_id;
+```
+
+---
+
+## Problem 2
+
+Find employees without department.
+
+```sql
+SELECT e.*
+FROM employee e
+LEFT JOIN department d
+ON e.dept_id=d.dept_id
+WHERE d.dept_id IS NULL;
+```
+
+### Output
+
+Tom
+
+---
+
+## Problem 3
+
+Find departments without employees.
+
+```sql
+SELECT d.*
+FROM department d
+LEFT JOIN employee e
+ON d.dept_id=e.dept_id
+WHERE e.emp_id IS NULL;
+```
+
+### Output
+
+Admin
+
+---
+
+## Problem 4
+
+Count employees in each department.
+
+```sql
+SELECT d.dept_name,
+       COUNT(e.emp_id)
+FROM department d
+LEFT JOIN employee e
+ON d.dept_id=e.dept_id
+GROUP BY d.dept_name;
+```
+
+### Output
+
+| Department | Count |
+| ---------- | ----- |
+| IT         | 2     |
+| HR         | 1     |
+| Finance    | 1     |
+| Admin      | 0     |
+
+---
+
+# Self Join (Frequently Asked)
+
+Same table joined with itself.
+
+### Employee Table
+
+| emp_id | name  | manager_id |
+| ------ | ----- | ---------- |
+| 1      | John  | NULL       |
+| 2      | Mary  | 1          |
+| 3      | David | 1          |
+| 4      | Sara  | 2          |
+
+---
+
+### Find Employee and Manager
+
+```sql
+SELECT e.name AS employee,
+       m.name AS manager
+FROM employee e
+LEFT JOIN employee m
+ON e.manager_id = m.emp_id;
+```
+
+### Output
+
+| Employee | Manager |
+| -------- | ------- |
+| John     | NULL    |
+| Mary     | John    |
+| David    | John    |
+| Sara     | Mary    |
+
+---
+
+# CPDSS-Based Join Example
+
+Suppose:
+
+### vessel
+
+| vessel_id | vessel_name |
+| --------- | ----------- |
+| 1         | MT Alpha    |
+
+### voyage
+
+| voyage_id | vessel_id |
+| --------- | --------- |
+| 1001      | 1         |
+
+---
+
+### Fetch Vessel Name and Voyage
+
+```sql
+SELECT v.vessel_name,
+       vg.voyage_id
+FROM vessel v
+INNER JOIN voyage vg
+ON v.vessel_id = vg.vessel_id;
+```
+
+---
+
+# Interview Questions
+
+### Q1. Difference between INNER JOIN and LEFT JOIN?
+
+**Answer**
+
+| INNER JOIN             | LEFT JOIN                    |
+| ---------------------- | ---------------------------- |
+| Only matching rows     | All left table rows          |
+| Unmatched rows ignored | Unmatched rows shown as NULL |
+
+---
+
+### Q2. How to find records present in one table but not another?
+
+```sql
+SELECT e.*
+FROM employee e
+LEFT JOIN department d
+ON e.dept_id=d.dept_id
+WHERE d.dept_id IS NULL;
+```
+
+---
+
+### Q3. Which JOIN is used most in projects?
+
+**Answer:**
+
+* INNER JOIN ✅ (most common)
+* LEFT JOIN ✅ (very common)
+* RIGHT JOIN ❌ (rare)
+* FULL JOIN ❌ (rare)
+
+In CPDSS/Spring Boot projects, you'll mostly use **INNER JOIN and LEFT JOIN**.
+
+---
+
+## Practice Questions
+
+1. Get employee name and department name.
+2. Find employees without department.
+3. Find departments without employees.
+4. Count employees per department.
+5. Find employee-manager relationship using Self Join.
+6. Find all employees even if department is missing.
+7. Find all departments even if no employee exists.
+
+After JOINS, the next interview topic is **Subqueries (very common for second highest salary, above average salary, EXISTS, IN, NOT IN)**.
+
+
+
+-------------------------------------------------------------------------------------------------------------------------------------------
+
+### What is Self Join?
+
+A **Self Join** is a join where a table is joined with itself.
+
+It is useful when rows in the same table are related to each other.
+
+### Example: Employee and Manager
+
+**employees**
+
+| emp_id | emp_name | manager_id |
+| ------ | -------- | ---------- |
+| 1      | John     | NULL       |
+| 2      | Mary     | 1          |
+| 3      | Sam      | 1          |
+| 4      | David    | 2          |
+
+Here:
+
+* John is the manager of Mary and Sam.
+* Mary is the manager of David.
+
+### Query
+
+```sql
+SELECT e.emp_name AS Employee,
+       m.emp_name AS Manager
+FROM employees e
+LEFT JOIN employees m
+ON e.manager_id = m.emp_id;
+```
+
+### Result
+
+| Employee | Manager |
+| -------- | ------- |
+| John     | NULL    |
+| Mary     | John    |
+| Sam      | John    |
+| David    | Mary    |
+
+### Why aliases?
+
+Since the same table is used twice:
+
+```sql
+employees e   -- Employee table
+employees m   -- Manager table
+```
+
+* `e` represents employee records.
+* `m` represents manager records.
+
+### Interview Answer
+
+> A Self Join is a join where a table is joined with itself using aliases. It is commonly used to represent hierarchical relationships such as employee-manager, parent-child, or category-subcategory relationships.
+
+### Common Interview Question
+
+**Find employees reporting to John**
+
+```sql
+SELECT e.emp_name
+FROM employees e
+JOIN employees m
+ON e.manager_id = m.emp_id
+WHERE m.emp_name = 'John';
+```
+
+**Output:**
+
+| emp_name |
+| -------- |
+| Mary     |
+| Sam      |
+
+This is one of the most common Self Join interview examples.
+
